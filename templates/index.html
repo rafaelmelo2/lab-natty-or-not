@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IA Generativa - Geração de Imagens</title>
+    <script>
+        function generateImage() {
+            let prompt = document.getElementById("prompt").value;
+            if (prompt === "") {
+                alert("Por favor, insira um prompt.");
+                return;
+            }
+
+            document.getElementById("status").innerText = "🚀 Enviando prompt...";
+
+            fetch("/generate", {
+                method: "POST",
+                body: new URLSearchParams({ "prompt": prompt }),
+                headers: { "Content-Type": "application/x-www-form-urlencoded" }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    document.getElementById("status").innerText = "🔄 Gerando imagem...";
+                    checkStatus();
+                }
+            });
+        }
+
+        function checkStatus() {
+            fetch("/status")
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("status").innerText = data.progress;
+                
+                if (data.image) {
+                    document.getElementById("generatedImage").src = "/static/generated/" + data.image;
+                    document.getElementById("generatedImage").style.display = "block";
+                } else {
+                    setTimeout(checkStatus, 2000);
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>🖼️ IA Generativa - Geração de Imagens</h1>
+    <input type="text" id="prompt" placeholder="Digite sua descrição aqui..." />
+    <button onclick="generateImage()">Gerar Imagem</button>
+
+    <h2>Status: <span id="status">Aguardando prompt...</span></h2>
+
+    <h2>Imagem Gerada:</h2>
+    <img id="generatedImage" src="" style="display: none; max-width: 500px;">
+
+</body>
+</html>
