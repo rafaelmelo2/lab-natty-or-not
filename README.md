@@ -1,8 +1,5 @@
 # IA de Criação de Imagens
 
-
-# Ia de criação de imagens
-
 📒 Descrição
 ```
 Este projeto é uma aplicação web desenvolvida em Python utilizando o framework Flask e o modelo de difusão estável (Stable Diffusion) para gerar imagens a partir de descrições textuais fornecidas pelo usuário. A aplicação permite que os usuários insiram um prompt textual, que é então processado para gerar uma imagem correspondente, exibindo o progresso da geração em tempo real.
